@@ -1,4 +1,4 @@
-package com.testcase.join.controller;
+package com.casejoin.productInventory.controller;
 
 import java.util.List;
 import java.util.UUID;
@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.testcase.join.dto.ApiResponseDto;
-import com.testcase.join.dto.ProductDto;
-import com.testcase.join.dto.ProductFilterDto;
-import com.testcase.join.exception.CustomNotFoundException;
-import com.testcase.join.exception.RequiredArgumentsMissing;
-import com.testcase.join.service.ProductService;
+import com.casejoin.productInventory.dto.ApiResponseDto;
+import com.casejoin.productInventory.dto.ProductDto;
+import com.casejoin.productInventory.dto.ProductFilterDto;
+import com.casejoin.productInventory.exception.CustomNotFoundException;
+import com.casejoin.productInventory.exception.RequiredArgumentsMissing;
+import com.casejoin.productInventory.service.ProductService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

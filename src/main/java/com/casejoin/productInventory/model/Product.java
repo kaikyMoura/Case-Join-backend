@@ -1,4 +1,4 @@
-package com.testcase.join.model;
+package com.casejoin.productInventory.model;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -6,7 +6,7 @@ import java.util.UUID;
 
 import org.hibernate.annotations.CreationTimestamp;
 
-import com.testcase.join.enums.Category;
+import com.casejoin.productInventory.enums.Category;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -31,7 +31,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @Table(name = "product")
 public class Product implements Serializable {
-
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -61,6 +60,18 @@ public class Product implements Serializable {
     private LocalDateTime createdAt = LocalDateTime.now();
     private LocalDateTime updatedAt;
 
+    /**
+     * Set the creation timestamp if it hasn't been set yet.
+     * <p>
+     * This is a callback for the {@link javax.persistence.PrePersist} event.
+     * <p>
+     * If the {@link #createdAt} is null, which is the case when a new entity is
+     * created,
+     * the current date and time is set.
+     * <p>
+     * The {@link #createdAt} is not updated when the entity is updated.
+     *
+     **/
     @PrePersist
     protected void onCreate() {
         if (createdAt == null)

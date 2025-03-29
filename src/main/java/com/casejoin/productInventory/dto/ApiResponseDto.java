@@ -1,4 +1,4 @@
-package com.testcase.join.dto;
+package com.casejoin.productInventory.dto;
 
 public record ApiResponseDto<T>(
         int statusCode,

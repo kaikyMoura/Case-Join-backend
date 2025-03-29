@@ -1,4 +1,4 @@
-package com.testcase.join.service;
+package com.casejoin.productInventory.service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,12 +12,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import com.testcase.join.dto.ProductDto;
-import com.testcase.join.dto.ProductFilterDto;
-import com.testcase.join.exception.CustomNotFoundException;
-import com.testcase.join.exception.RequiredArgumentsMissing;
-import com.testcase.join.model.Product;
-import com.testcase.join.repository.ProductRepository;
+import com.casejoin.productInventory.dto.ProductDto;
+import com.casejoin.productInventory.dto.ProductFilterDto;
+import com.casejoin.productInventory.exception.CustomNotFoundException;
+import com.casejoin.productInventory.exception.RequiredArgumentsMissing;
+import com.casejoin.productInventory.model.Product;
+import com.casejoin.productInventory.repository.ProductRepository;
 
 import jakarta.persistence.criteria.Predicate;
 
@@ -57,19 +57,24 @@ public class ProductService {
      *
      * @param productFilterDto the product filter criteria
      * @return a list of ProductDto containing the filtered products
+     * @throws CustomNotFoundException if no products are found
      */
-    public List<ProductDto> getProducts(ProductFilterDto productFilterDto) {
+    public List<ProductDto> getProducts(ProductFilterDto productFilterDto) throws CustomNotFoundException {
 
         Specification<Product> filter = getFilteredProducts(productFilterDto);
 
-        // Paginação
-        // Usando o Math.max para garantir que a página não seja negativa
+        // Pagination
+        // Using Math.max to ensure that the page is at least 1
         Pageable pageable = PageRequest.of(Math.max(productFilterDto.page() - 1, 0), productFilterDto.pageSize());
 
-        Page<Product> products = productRepository.findAll(filter, pageable);
+        Page<Product> productsPageable = productRepository.findAll(filter, pageable);
 
-        // Convertendo Page para uma lista de ProductDto
-        return products.stream().map(product -> new ProductDto(
+        if (productsPageable.isEmpty()) {
+            throw new CustomNotFoundException("No products found");
+        }
+
+        // Convert to ProductDto
+        return productsPageable.stream().map(product -> new ProductDto(
                 product.getId(),
                 product.getName(),
                 product.getDescription(),
@@ -95,10 +100,13 @@ public class ProductService {
     public Specification<Product> getFilteredProducts(ProductFilterDto productFilterDto) {
 
         /**
-         * Cria uma especificação para filtrar os produtos
-         * baseado nos critérios fornecidos
-         * A Specification permite criar consultas dinâmicas
-         * usando os critérios especificados no ProductFilterDto
+         * Creates a Specification for filtering products based on the provided
+         * filter criteria.
+         * The Specification is used to create a dynamic query that returns products
+         * that match the specified criteria.
+         * root: The root of the query, which is the Product entity.
+         * query: The query object, which is used to build the query.
+         * cb: The CriteriaBuilder object, which is used to create the query.
          */
         return (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();

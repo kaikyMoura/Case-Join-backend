@@ -1,4 +1,4 @@
-package com.testcase.join.enums;
+package com.casejoin.productInventory.enums;
 
 public enum Category {
     TECHNOLOGY,

@@ -1,11 +1,12 @@
-package com.testcase.join.exception;
+package com.casejoin.productInventory.exception;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 
-import com.testcase.join.dto.ErrorResponseDto;
+import com.casejoin.productInventory.dto.ErrorResponseDto;
+
 
 @ControllerAdvice
 public class GlobalExceptioonHandler {

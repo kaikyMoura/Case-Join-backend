@@ -10,10 +10,10 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.case.join</groupId>
-	<artifactId>productmanager</artifactId>
+	<artifactId>product-inventory</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>productmanager</name>
-	<description>Demo project for Spring Boot</description>
+	<name>productInventory</name>
+	<description>Product inventory project</description>
 	<url />
 	<licenses>
 		<license />
@@ -61,6 +61,12 @@
 		</dependency>
 
 		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
 			<version>2.6.0</version>
@@ -72,11 +78,11 @@
 			<optional>true</optional>
 		</dependency>
 
-		<!-- <dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter</artifactId>
 			<scope>test</scope>
-		</dependency> -->
+		</dependency>
 
 		<dependency>
 			<groupId>jakarta.servlet</groupId>
