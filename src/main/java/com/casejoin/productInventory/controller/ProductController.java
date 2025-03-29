@@ -51,6 +51,7 @@ public class ProductController {
          * @param pageSize   the page size
          * @return a ResponseEntity containing the list of products, or an empty list if
          *         no products are found
+         * @throws CustomNotFoundException 
          */
         @Operation(summary = "Get all products or filtered")
         @ApiResponses(value = {
@@ -66,7 +67,7 @@ public class ProductController {
                         @Parameter(description = "filter by product min price", required = false) @RequestParam(required = false, defaultValue = "1,00") String minPrice,
                         @Parameter(description = "filter by product max price", required = false) @RequestParam(required = false, defaultValue = "1000,00") String maxPrice,
                         @Parameter(description = "add pagination", required = false) @RequestParam(required = false, defaultValue = "1") int page,
-                        @Parameter(description = "add pagination", required = false) @RequestParam(required = false, defaultValue = "10") int pageSize) {
+                        @Parameter(description = "add pagination", required = false) @RequestParam(required = false, defaultValue = "10") int pageSize) throws CustomNotFoundException {
 
                 ProductFilterDto productFilterDto = new ProductFilterDto(
                                 name,
