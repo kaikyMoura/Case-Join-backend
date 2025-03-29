@@ -1,19 +1,20 @@
 package com.testcase.join.dto;
 
-import java.util.Optional;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.testcase.join.enums.Category;
 
-import jakarta.validation.constraints.NotBlank;
-
-@NotBlank
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public record ProductDto(
-        Optional<UUID> id,
-        String name,
-        Optional<String> description,
-        String brand,
-        Category category,
-        int quantity,
-        double price) {
+                UUID id,
+                String name,
+                String description,
+                String brand,
+                Category category,
+                Integer quantity,
+                Double price,
+                LocalDateTime createdAt,
+                LocalDateTime updatedAt) {
 }

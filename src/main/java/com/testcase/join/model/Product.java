@@ -15,6 +15,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -33,14 +35,25 @@ public class Product implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID) 
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+
+    @NotBlank
+    @Max(value = 100)
     private String name;
+
+    @Max(value = 255)
     private String description;
+
+    @Max(value = 100)
     private String brand;
+
+    @NotBlank
     private Category category;
-    private int quantity;
-    private double price;
+
+    private Integer quantity;
+
+    private Double price;
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)

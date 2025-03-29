@@ -10,8 +10,8 @@ import com.testcase.join.dto.ErrorResponseDto;
 @ControllerAdvice
 public class GlobalExceptioonHandler {
 
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<ErrorResponseDto> handleEntityNotFoundException(IllegalArgumentException ex, WebRequest request) {
+    @ExceptionHandler(CustomNotFoundException.class)
+    public ResponseEntity<ErrorResponseDto> handleEntityNotFoundException(CustomNotFoundException ex, WebRequest request) {
         ErrorResponseDto errorResponse = new ErrorResponseDto(404, "No result found", ex.getMessage());
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
