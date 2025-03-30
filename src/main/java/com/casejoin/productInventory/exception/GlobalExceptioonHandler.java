@@ -23,4 +23,10 @@ public class GlobalExceptioonHandler {
         ex.printStackTrace();
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @ExceptionHandler(RequiredArgumentsMissing.class)
+    public ResponseEntity<ErrorResponseDto> handleEntityRequiredArgumentsMissing(RequiredArgumentsMissing ex, WebRequest request) {
+        ErrorResponseDto errorResponse = new ErrorResponseDto(401, "Required arguments missing", ex.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
 }

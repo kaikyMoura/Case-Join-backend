@@ -1,6 +1,5 @@
 package com.casejoin.productInventory.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -60,14 +59,15 @@ public class ProductService {
      * @throws CustomNotFoundException if no products are found
      */
     public List<ProductDto> getProducts(ProductFilterDto productFilterDto) throws CustomNotFoundException {
-
-        Specification<Product> filter = getFilteredProducts(productFilterDto);
+        Specification<Product> specification = isFilterEmpty(productFilterDto) ? null : getFilteredProducts(productFilterDto);
 
         // Pagination
         // Using Math.max to ensure that the page is at least 1
-        Pageable pageable = PageRequest.of(Math.max(productFilterDto.page() - 1, 0), productFilterDto.pageSize());
+        // Using ternary operator to ensure that the pageSize is at least 1
+        Pageable pageable = PageRequest.of(Math.max(productFilterDto.page() - 1, 0),
+                (productFilterDto.pageSize() > 0 ? productFilterDto.pageSize() : 10));
 
-        Page<Product> productsPageable = productRepository.findAll(filter, pageable);
+        Page<Product> productsPageable = productRepository.findAll(specification != null ? specification : Specification.where(null), pageable);
 
         if (productsPageable.isEmpty()) {
             throw new CustomNotFoundException("No products found");
@@ -96,41 +96,33 @@ public class ProductService {
      * @param productFilterDto the product filter criteria
      * @return a Specification for filtering products
      */
+    private Specification<Product> getFilteredProducts(ProductFilterDto filterDto) {
 
-    public Specification<Product> getFilteredProducts(ProductFilterDto productFilterDto) {
+        return (root, query, builder) -> {
+            Predicate predicate = builder.conjunction();
 
-        /**
-         * Creates a Specification for filtering products based on the provided
-         * filter criteria.
-         * The Specification is used to create a dynamic query that returns products
-         * that match the specified criteria.
-         * root: The root of the query, which is the Product entity.
-         * query: The query object, which is used to build the query.
-         * cb: The CriteriaBuilder object, which is used to create the query.
-         */
-        return (root, query, cb) -> {
-            List<Predicate> predicates = new ArrayList<>();
-            if (productFilterDto.name() != null) {
-                predicates.add(cb.like(cb.lower(root.get("name")), "%" + productFilterDto.name().toLowerCase() + "%"));
+            if (filterDto.name() != null && !filterDto.name().isBlank()) {
+                predicate = builder.and(predicate, builder.like(root.get("name"), "%" + filterDto.name() + "%"));
             }
 
-            if (productFilterDto.category() != null) {
-                predicates.add(cb.equal(root.get("category"), productFilterDto.category()));
+            if (filterDto.category() != null) {
+                predicate = builder.and(predicate, builder.equal(root.get("category"), filterDto.category()));
             }
 
-            if (productFilterDto.brand() != null) {
-                predicates.add(cb.equal(root.get("brand"), productFilterDto.brand()));
+            if (filterDto.brand() != null && !filterDto.brand().isBlank()) {
+                predicate = builder.and(predicate, builder.like(root.get("brand"), "%" + filterDto.brand() + "%"));
             }
 
-            if (productFilterDto.minPrice() != null) {
-                predicates.add(cb.greaterThanOrEqualTo(root.get("price"), productFilterDto.minPrice()));
+            if (filterDto.minPrice() != null) {
+                predicate = builder.and(predicate,
+                        builder.greaterThanOrEqualTo(root.get("price"), filterDto.minPrice()));
             }
 
-            if (productFilterDto.maxPrice() != null) {
-                predicates.add(cb.lessThanOrEqualTo(root.get("price"), productFilterDto.maxPrice()));
+            if (filterDto.maxPrice() != null) {
+                predicate = builder.and(predicate, builder.lessThanOrEqualTo(root.get("price"), filterDto.maxPrice()));
             }
 
-            return cb.and(predicates.toArray(new Predicate[0]));
+            return predicate;
         };
     }
 
@@ -141,8 +133,9 @@ public class ProductService {
      * @throws RequiredArgumentsMissing if the product DTO is null
      */
     public void createProduct(ProductDto productDto) throws RequiredArgumentsMissing {
-        if (productDto == null) {
-            throw new RequiredArgumentsMissing("Product is missing");
+        if (productDto == null || productDto.name() == null || productDto.category() == null
+                || productDto.price() == null) {
+            throw new RequiredArgumentsMissing("Product is missing or some fields are empty");
         }
 
         Product product = Product.builder().id(UUID.randomUUID()).brand(productDto.brand())
@@ -193,5 +186,24 @@ public class ProductService {
                     new CustomNotFoundException("Product not found");
                 });
         productRepository.deleteById(id);
+    }
+
+    /**
+     * Checks if the given product filter is empty.
+     * <p>
+     * A filter is considered empty if it is null, or if all of its fields are
+     * null, empty or blank.
+     * 
+     * @param filter the filter to check
+     * @return true if the filter is empty, false otherwise
+     */
+    private boolean isFilterEmpty(ProductFilterDto filter) {
+        return filter == null || (
+            (filter.name() == null || filter.name().isBlank()) &&
+            filter.category() == null &&
+            (filter.brand() == null || filter.brand().isBlank()) &&
+            filter.minPrice() == null &&
+            filter.maxPrice() == null
+        );
     }
 }
