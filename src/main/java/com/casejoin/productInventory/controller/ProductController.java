@@ -50,7 +50,6 @@ public class ProductController {
          * @param byBrand    the product brand
          * @param byMinPrice the minimum product price
          * @param byMaxPrice the maximum product price
-         * @param limit      the maximum number of products to be returned
          * @param page       the page number (1-indexed)
          * @param pageSize   the page size
          * @return a ResponseEntity containing the list of products, or an empty list if
