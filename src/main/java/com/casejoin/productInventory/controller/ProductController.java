@@ -106,7 +106,7 @@ public class ProductController {
                         @ApiResponse(responseCode = "404", description = "Product not found", content = @Content) })
         @GetMapping("{id}")
         public ResponseEntity<ApiResponseDto<ProductDto>> getProductById(
-                        @Parameter(description = "product id", required = true) @RequestParam(required = true) UUID id)
+                        @Parameter(description = "product id", required = true) @PathVariable(required = true) UUID id)
                         throws RequiredArgumentsMissing, CustomNotFoundException {
 
                 return new ResponseEntity<>(
