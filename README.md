@@ -4,7 +4,7 @@
 <br/>
 
 ### 1. Sobre o projeto
-Este repositório contem o back do [Case Join - FrontEnd](https://github.com/kaikyMoura/Case-join-frontend), responsável pelas operações de CRUD. Foi desenvolvido utilizando o Spring Boot 3.3.10 e o Java JDK 21, e, H2 como banco de dados.
+Este repositório contem o back-end do [Case Join - FrontEnd](https://github.com/kaikyMoura/Case-join-frontend), responsável pelas operações de CRUD. Foi desenvolvido utilizando o Spring Boot 3.3.10 e o Java JDK 21, e, H2 como banco de dados.
 
 Este aplicação segue o padrão REST.
 
