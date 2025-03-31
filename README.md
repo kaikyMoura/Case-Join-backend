@@ -54,7 +54,7 @@ Este aplicação segue o padrão REST.
 
 O projeto segue uma arquitetura REST, com uma clara separação de modelos, serviços e controladores.
 
-⚙️ **Fluxo de Criação de Conta & Autenticação:**
+⚙️ **Fluxo de Criação e visualização dos produto:**
 - Para criar um produto, envie uma requisição POST para **/product** com o produto no corpo [consulte a documentação do Swagger para entender melhor].
 ```json
 {
@@ -68,7 +68,8 @@ O projeto segue uma arquitetura REST, com uma clara separação de modelos, serv
 ```
   
 - Por padrão, novos produtos têm IDs atribuídos automaticamente usando UUID.
-- O classe Product tem os seguintes campos:
+- A classe Product tem os seguintes campos:
+  
 ```js
     private UUID id;
     private String name;
